@@ -1,2 +1,5 @@
 *.exe
+!App/NouzertGames.exe
 *.zip
+bin/
+obj/
