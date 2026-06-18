@@ -1,0 +1,684 @@
+<Window x:Class="NouzertGames.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:NouzertGames.Models"
+        mc:Ignorable="d"
+        Title="NouzertGames"
+        Height="800"
+        Width="1200"
+        MinHeight="600"
+        MinWidth="900"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="CanResizeWithGrip"
+        Icon="/nouzertool.ico"
+        Background="#0E141B">
+
+    <Window.Resources>
+        <LinearGradientBrush x:Key="WindowBackground" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#0B1118" Offset="0"/>
+            <GradientStop Color="#101C27" Offset="0.52"/>
+            <GradientStop Color="#172A3A" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="HeaderBackground" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#171A21" Offset="0"/>
+            <GradientStop Color="#1B2838" Offset="0.6"/>
+            <GradientStop Color="#22394C" Offset="1"/>
+        </LinearGradientBrush>
+
+        <SolidColorBrush x:Key="PrimaryBackground" Color="#101822"/>
+        <SolidColorBrush x:Key="SecondaryBackground" Color="#172332"/>
+        <SolidColorBrush x:Key="CardBackground" Color="#1B2A3A"/>
+        <SolidColorBrush x:Key="CardHoverBackground" Color="#24384B"/>
+        <SolidColorBrush x:Key="AccentColor" Color="#66C0F4"/>
+        <SolidColorBrush x:Key="AccentHoverColor" Color="#8FD6FF"/>
+        <SolidColorBrush x:Key="AccentDarkColor" Color="#2A475E"/>
+        <SolidColorBrush x:Key="TextPrimary" Color="#F5F7FA"/>
+        <SolidColorBrush x:Key="TextSecondary" Color="#ACB8C4"/>
+        <SolidColorBrush x:Key="TextMuted" Color="#6F7D8B"/>
+        <SolidColorBrush x:Key="BorderColor" Color="#2B465C"/>
+        <SolidColorBrush x:Key="SuccessColor" Color="#A4D007"/>
+        <SolidColorBrush x:Key="ErrorColor" Color="#D94141"/>
+        <SolidColorBrush x:Key="WarningColor" Color="#C7A247"/>
+
+        <Style x:Key="GameCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource CardBackground}"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="14"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource CardHoverBackground}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource AccentColor}"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="#66C0F4" BlurRadius="16" ShadowDepth="0" Opacity="0.18"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AccentColor}"/>
+            <Setter Property="Foreground" Value="#071019"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource AccentHoverColor}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#4A5562"/>
+                    <Setter Property="Foreground" Value="#B8C0C8"/>
+                    <Setter Property="Opacity" Value="0.45"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource CardBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource AccentDarkColor}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource AccentColor}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="TabButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="22,12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" CornerRadius="4,4,0,0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                    <Setter Property="Background" Value="{StaticResource AccentDarkColor}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ModernTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#0E1721"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="CaretBrush" Value="{StaticResource AccentColor}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="4" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="{StaticResource AccentColor}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="WindowButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="42"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource AccentDarkColor}"/>
+                    <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="{StaticResource WindowBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="{StaticResource HeaderBackground}" Padding="24,12" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Source="/nouzertool.ico" Width="34" Height="34" Margin="0,0,12,0"/>
+                    <StackPanel>
+                        <TextBlock Text="NouzertGames" FontSize="23" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                        <TextBlock Text="Gerenciador NouzertGames" FontSize="12" Foreground="{StaticResource TextMuted}" Margin="1,1,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="SteamToolsStatusIndicator"
+                               Text="SteamTools nao funcionando"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource ErrorColor}"
+                               VerticalAlignment="Center"
+                               Margin="0,0,16,0"
+                               Cursor="Hand"
+                               ToolTip="Clique para iniciar o SteamTools"
+                               MouseLeftButtonDown="SteamToolsStatusIndicator_MouseLeftButtonDown"/>
+                    <Button x:Name="RestartSteamButton"
+                            Content="Reiniciar Steam"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Click="RestartSteamButton_Click"
+                            ToolTip="Reiniciar a Steam para aplicar alteracoes"/>
+                </StackPanel>
+                <StackPanel Grid.Column="3" Orientation="Horizontal" Margin="18,0,0,0" VerticalAlignment="Center">
+                    <Button Content="_" Style="{StaticResource WindowButtonStyle}" Click="MinimizeButton_Click"/>
+                    <Button Content="□" Style="{StaticResource WindowButtonStyle}" Click="MaximizeButton_Click"/>
+                    <Button Content="X" Style="{StaticResource WindowButtonStyle}" Click="CloseButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" Background="#0D151E" Padding="24,6,24,0" BorderBrush="{StaticResource BorderColor}" BorderThickness="0,1,0,1">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="CatalogTab" Content="Catalogo" Style="{StaticResource TabButtonStyle}" Click="TabButton_Click" Tag="Catalog"/>
+                <Button x:Name="GeneratorTab" Content="NouzertGeneratorManifest" Style="{StaticResource TabButtonStyle}" Click="TabButton_Click" Tag="Generator"/>
+                <Button x:Name="LibraryTab" Content="Biblioteca" Style="{StaticResource TabButtonStyle}" Click="TabButton_Click" Tag="Library"/>
+                <Button x:Name="SettingsTab" Content="Configuracoes" Style="{StaticResource TabButtonStyle}" Click="TabButton_Click" Tag="Settings"/>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="2" Margin="24">
+            <Grid x:Name="CatalogView" Visibility="Visible">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Background="{StaticResource SecondaryBackground}" CornerRadius="8" Padding="16" Margin="0,0,0,16" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"
+                                 x:Name="SearchTextBox"
+                                 Style="{StaticResource ModernTextBoxStyle}"
+                                 Text="Digite o AppID ou nome do jogo..."
+                                 GotFocus="SearchTextBox_GotFocus"
+                                 LostFocus="SearchTextBox_LostFocus"
+                                 TextChanged="SearchTextBox_TextChanged"
+                                 KeyDown="SearchTextBox_KeyDown"/>
+                        <Button Grid.Column="1"
+                                Content="Buscar"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Margin="8,0,0,0"
+                                Click="SearchButton_Click"/>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1" Background="{StaticResource SecondaryBackground}" CornerRadius="8" Padding="12" Margin="0,0,0,10" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" x:Name="PaginationPanel">
+                        <Button Content="Anterior" x:Name="BtnPrevious"
+                                Click="OnPreviousPageClick"
+                                Width="100" Height="32" Margin="5,0,5,0"
+                                Background="{StaticResource CardBackground}"
+                                Foreground="{StaticResource TextPrimary}"
+                                BorderBrush="{StaticResource BorderColor}"
+                                BorderThickness="1"
+                                Cursor="Hand"/>
+                        <ComboBox Width="65" Height="32" SelectedIndex="0" Margin="10,0,5,0" x:Name="ComboPageSize"
+                                  Background="{StaticResource CardBackground}"
+                                  Foreground="{StaticResource TextPrimary}"
+                                  SelectionChanged="ComboPageSize_SelectionChanged">
+                            <ComboBoxItem Content="20"/>
+                            <ComboBoxItem Content="50"/>
+                        </ComboBox>
+                        <TextBlock Text="de 0 jogos" VerticalAlignment="Center" Foreground="{StaticResource TextSecondary}" Margin="5,0,15,0" x:Name="TxtTotalGames"/>
+                        <TextBlock Text="Pagina" VerticalAlignment="Center" Foreground="{StaticResource TextSecondary}" Margin="5,0,5,0"/>
+                        <TextBox Text="1" Width="40" Height="32" TextAlignment="Center" VerticalContentAlignment="Center" x:Name="TxtCurrentPage"
+                                 IsReadOnly="True"
+                                 Background="{StaticResource CardBackground}"
+                                 Foreground="{StaticResource TextPrimary}"
+                                 BorderBrush="{StaticResource BorderColor}"/>
+                        <TextBlock Text="de 1" VerticalAlignment="Center" Foreground="{StaticResource TextSecondary}" Margin="5,0,10,0" x:Name="TxtTotalPages"/>
+                        <Button Content="Proxima" x:Name="BtnNext"
+                                Click="OnNextPageClick"
+                                Width="100" Height="32" Margin="5,0,5,0"
+                                Background="{StaticResource CardBackground}"
+                                Foreground="{StaticResource TextPrimary}"
+                                BorderBrush="{StaticResource BorderColor}"
+                                BorderThickness="1"
+                                Cursor="Hand"/>
+                    </StackPanel>
+                        <Button Grid.Column="1"
+                                x:Name="RefreshCatalogButton"
+                                Content="Atualizar"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                Padding="12,6"
+                                Margin="12,0,0,0"
+                                Click="RefreshCatalogButton_Click"/>
+                    </Grid>
+                </Border>
+
+                <ListBox x:Name="GamesGrid"
+                         Grid.Row="2"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         ScrollViewer.CanContentScroll="True"
+                         VirtualizingPanel.IsVirtualizing="True"
+                         VirtualizingPanel.ScrollUnit="Pixel"
+                         VirtualizingPanel.VirtualizationMode="Recycling">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Margin" Value="0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <ContentPresenter/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type models:GameItem}">
+                            <Border Style="{StaticResource GameCardStyle}" Margin="0,0,0,8"
+                                    HorizontalAlignment="Stretch">
+                                <Grid VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="124"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Width="132" Height="62" Background="#0E141B" CornerRadius="6" ClipToBounds="True" Margin="0,0,12,0">
+                                        <Image Source="{Binding ImageUrl}" Stretch="UniformToFill"/>
+                                    </Border>
+                                    <Grid Grid.Column="1" VerticalAlignment="Center" Margin="0,0,12,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0"
+                                                   Text="{Binding Name}"
+                                                   FontSize="16"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource TextPrimary}"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Grid.Row="1"
+                                                   Text="{Binding AppId}"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource AccentColor}"
+                                                   Margin="0,3,0,0"/>
+                                        <TextBlock Text="{Binding ShortDescription}"
+                                                   Grid.Row="2"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextSecondary}"
+                                                   Margin="0,4,0,0"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   MaxHeight="30"
+                                                   TextWrapping="Wrap"/>
+                                        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,4,0,0">
+                                            <TextBlock Text="{Binding DevelopersText}" FontSize="11" Foreground="{StaticResource TextMuted}" TextTrimming="CharacterEllipsis" MaxWidth="220"/>
+                                            <TextBlock Text="  " FontSize="11"/>
+                                            <TextBlock Text="{Binding ReleaseDateText}" FontSize="11" Foreground="{StaticResource TextMuted}" TextTrimming="CharacterEllipsis"/>
+                                        </StackPanel>
+                                    </Grid>
+                                    <Button Grid.Column="2"
+                                            Content="Adicionar"
+                                            Style="{StaticResource PrimaryButtonStyle}"
+                                            Background="{StaticResource SuccessColor}"
+                                            IsEnabled="{Binding ActionsEnabled}"
+                                            Tag="{Binding AppId}"
+                                            Click="AddGameButton_Click"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Stretch"
+                                            Padding="0,10"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+
+            <Grid x:Name="GeneratorView" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" MaxWidth="760" HorizontalAlignment="Center" Margin="0,20,0,18">
+                    <TextBlock Text="NouzertGeneratorManifest"
+                               FontSize="26"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource TextPrimary}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,6"/>
+                    <TextBlock Text="Pesquise por nome ou AppID para baixar um ZIP com .manifest e .lua sem instalar direto na Steam."
+                               FontSize="13"
+                               Foreground="{StaticResource TextSecondary}"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,16"/>
+                    <Border Background="{StaticResource SecondaryBackground}" CornerRadius="8" Padding="12" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0"
+                                     x:Name="GeneratorSearchTextBox"
+                                     Style="{StaticResource ModernTextBoxStyle}"
+                                     Text="Digite o AppID ou nome do jogo..."
+                                     GotFocus="GeneratorSearchTextBox_GotFocus"
+                                     LostFocus="GeneratorSearchTextBox_LostFocus"
+                                     KeyDown="GeneratorSearchTextBox_KeyDown"/>
+                            <Button Grid.Column="1"
+                                    Content="Pesquisar"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Margin="8,0,0,0"
+                                    Click="GeneratorSearchButton_Click"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
+                <Border Grid.Row="1" Background="{StaticResource SecondaryBackground}" CornerRadius="8" Padding="12" Margin="0,0,0,10" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+                    <TextBlock x:Name="GeneratorInfoText"
+                               Text="Os resultados aparecem aqui com status de download, AppID, data, desenvolvedor e botao para baixar o pacote ZIP."
+                               Foreground="{StaticResource TextSecondary}"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"/>
+                </Border>
+
+                <ListBox x:Name="GeneratorResultsList"
+                         Grid.Row="2"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Margin" Value="0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <ContentPresenter/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type models:GameItem}">
+                            <Border Style="{StaticResource GameCardStyle}" Margin="0,0,0,8" HorizontalAlignment="Stretch">
+                                <Grid VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Width="132" Height="62" Background="#0E141B" CornerRadius="6" ClipToBounds="True" Margin="0,0,12,0">
+                                        <Image Source="{Binding ImageUrl}" Stretch="UniformToFill"/>
+                                    </Border>
+                                    <Grid Grid.Column="1" VerticalAlignment="Center" Margin="0,0,12,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Text="{Binding Name}" FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Grid.Row="1" Text="{Binding AppId}" FontSize="12" Foreground="{StaticResource AccentColor}" Margin="0,3,0,0"/>
+                                        <TextBlock Grid.Row="2" Text="{Binding ShortDescription}" FontSize="12" Foreground="{StaticResource TextSecondary}" Margin="0,4,0,0" TextTrimming="CharacterEllipsis" MaxHeight="30" TextWrapping="Wrap"/>
+                                        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,4,0,0">
+                                            <TextBlock Text="{Binding DevelopersText}" FontSize="11" Foreground="{StaticResource TextMuted}" TextTrimming="CharacterEllipsis" MaxWidth="220"/>
+                                            <TextBlock Text="  " FontSize="11"/>
+                                            <TextBlock Text="{Binding ReleaseDateText}" FontSize="11" Foreground="{StaticResource TextMuted}" TextTrimming="CharacterEllipsis"/>
+                                        </StackPanel>
+                                    </Grid>
+                                    <Button Grid.Column="2"
+                                            Content="Download ZIP"
+                                            Style="{StaticResource PrimaryButtonStyle}"
+                                            IsEnabled="{Binding ActionsEnabled}"
+                                            Tag="{Binding AppId}"
+                                            Click="DownloadManifestZipButton_Click"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Stretch"
+                                            Padding="0,10"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+
+            <Grid x:Name="LibraryView" Visibility="Collapsed">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Meus jogos instalados" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <Button Grid.Column="1"
+                                    x:Name="RefreshLibraryButton"
+                                    Content="Atualizar"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    Padding="12,6"
+                                    Click="RefreshLibraryButton_Click"/>
+                        </Grid>
+                        <ItemsControl x:Name="InstalledGamesList">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                        <TextBlock x:Name="NoGamesText"
+                                   Text="Nenhum jogo instalado ainda. Va ate a aba Catalogo para adicionar jogos."
+                                   Foreground="{StaticResource TextSecondary}"
+                                   FontSize="16"
+                                   Margin="0,20,0,0"
+                                   TextAlignment="Center"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+            <Grid x:Name="SettingsView" Visibility="Collapsed">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel MaxWidth="640">
+                        <TextBlock Text="Configuracoes" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,24"/>
+
+                        <Border x:Name="SteamToolsRequirementPanel" Background="{StaticResource SecondaryBackground}" CornerRadius="8" Padding="20" Margin="0,0,0,16" BorderBrush="{StaticResource ErrorColor}" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock x:Name="SteamToolsRequirementTitle" Text="SteamTools obrigatorio" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
+                                <TextBlock x:Name="SteamToolsRequirementInstruction" Text="E requisito obrigatorio ter o SteamTools instalado para aplicar os manifests. Baixe pelo site oficial, copie o codigo no seu PowerShell e aperte Enter." Foreground="{StaticResource TextSecondary}" Margin="0,0,0,12" TextWrapping="Wrap"/>
+                                <Button x:Name="SteamToolsDownloadButton" Content="Baixar SteamTools" Style="{StaticResource PrimaryButtonStyle}" Background="{StaticResource ErrorColor}" Foreground="{StaticResource TextPrimary}" Click="DownloadSteamToolsButton_Click"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="{StaticResource SecondaryBackground}" CornerRadius="8" Padding="20" Margin="0,0,0,16" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Controle de acesso" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
+                                <TextBlock Text="Digite o codigo de acesso uma unica vez. A ativacao sera protegida pelo Windows e vinculada a este computador." Foreground="{StaticResource TextSecondary}" Margin="0,0,0,12" TextWrapping="Wrap"/>
+                                <TextBox x:Name="AuthCodeTextBox" Style="{StaticResource ModernTextBoxStyle}" Margin="0,0,0,12" TextChanged="AuthCodeTextBox_TextChanged"/>
+                                <Button Content="Ativar este computador" Style="{StaticResource PrimaryButtonStyle}" Click="SaveAuthCodeButton_Click"/>
+                                <TextBlock x:Name="ActivationStatusText" Text="Status: aguardando codigo de ativacao." Foreground="{StaticResource WarningColor}" Margin="0,10,0,0" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="{StaticResource SecondaryBackground}" CornerRadius="8" Padding="20" Margin="0,0,0,16" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Chave NouzertGames" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
+                                <TextBlock Text="Cole sua chave NouzertGames nesta maquina. Ela nao fica embutida no executavel." Foreground="{StaticResource TextSecondary}" Margin="0,0,0,12" TextWrapping="Wrap"/>
+                                <PasswordBox x:Name="RyuManifestKeyBox" Margin="0,0,0,12" Height="38" Padding="12,8" Background="#0E1721" Foreground="{StaticResource TextPrimary}" BorderBrush="{StaticResource BorderColor}" BorderThickness="1"/>
+                                <Button x:Name="RyuManifestKeyButton" Content="Insira a chave NouzertGames" Style="{StaticResource PrimaryButtonStyle}" Background="{StaticResource ErrorColor}" Foreground="{StaticResource TextPrimary}" Click="SaveRyuManifestKeyButton_Click"/>
+                                <TextBlock x:Name="RyuManifestKeyStatusText" Text="Status: insira a chave NouzertGames." Foreground="{StaticResource ErrorColor}" Margin="0,10,0,0" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="{StaticResource SecondaryBackground}" CornerRadius="8" Padding="20" Margin="0,0,0,16" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Status da Steam" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                    <TextBlock Text="Caminho da Steam:" Foreground="{StaticResource TextSecondary}" Margin="0,0,8,0"/>
+                                    <TextBlock x:Name="SteamPathText" Foreground="{StaticResource TextPrimary}" Text="Detecting..."/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                    <TextBlock Text="Status:" Foreground="{StaticResource TextSecondary}" Margin="0,0,8,0"/>
+                                    <TextBlock x:Name="SteamStatusText" Foreground="{StaticResource WarningColor}" Text="Checking..."/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="{StaticResource SecondaryBackground}" CornerRadius="8" Padding="20" Margin="0,0,0,16" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Status do SteamTools" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                    <TextBlock Text="Status:" Foreground="{StaticResource TextSecondary}" Margin="0,0,8,0"/>
+                                    <TextBlock x:Name="SteamToolsStatusText" Foreground="{StaticResource WarningColor}" Text="Checking..."/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                    <TextBlock Text="Executavel:" Foreground="{StaticResource TextSecondary}" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="SteamToolsExeTextBox" Style="{StaticResource ModernTextBoxStyle}" TextWrapping="Wrap" VerticalAlignment="Center" Height="Auto" MinHeight="32" IsReadOnly="True" Width="350"/>
+                                    <Button Content="Procurar" Style="{StaticResource SecondaryButtonStyle}" Margin="8,0,0,0" Padding="12,6" FontSize="12" Click="BrowseSteamToolsButton_Click"/>
+                                </StackPanel>
+                                <Button x:Name="StartSteamToolsButton" Content="Iniciar SteamTools" Style="{StaticResource PrimaryButtonStyle}" Margin="0,12,0,0" IsEnabled="False" Click="StartSteamToolsButton_Click"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="{StaticResource SecondaryBackground}" CornerRadius="8" Padding="20" Margin="0,0,0,16" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Caminhos de injecao" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
+                                <TextBlock Text="Caminho do executavel da Steam:" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,4"/>
+                                <Border Background="{StaticResource CardBackground}" CornerRadius="4" Padding="12,8" Margin="0,0,0,12">
+                                    <TextBlock x:Name="SteamExePathText" Foreground="{StaticResource TextPrimary}" TextWrapping="Wrap" FontFamily="Consolas" FontSize="12" Text="Detecting..."/>
+                                </Border>
+                                <TextBlock Text="Caminho .lua (config/stplug-in):" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,4"/>
+                                <Border Background="{StaticResource CardBackground}" CornerRadius="4" Padding="12,8" Margin="0,0,0,12">
+                                    <TextBlock x:Name="LuaPathText" Foreground="{StaticResource TextPrimary}" TextWrapping="Wrap" FontFamily="Consolas" FontSize="12" Text="Detecting..."/>
+                                </Border>
+                                <TextBlock Text="Caminho .manifest (config/depotcache):" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,4"/>
+                                <Border Background="{StaticResource CardBackground}" CornerRadius="4" Padding="12,8">
+                                    <TextBlock x:Name="ManifestPathText" Foreground="{StaticResource TextPrimary}" TextWrapping="Wrap" FontFamily="Consolas" FontSize="12" Text="Detecting..."/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="{StaticResource SecondaryBackground}" CornerRadius="8" Padding="20" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Log do aplicativo" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
+                                <TextBox x:Name="LogTextBox" Style="{StaticResource ModernTextBoxStyle}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Height="300" FontFamily="Consolas" FontSize="12"/>
+                                <Button Content="Limpar log" Style="{StaticResource SecondaryButtonStyle}" Margin="0,8,0,0" Click="ClearLogButton_Click"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+
+        <Border Grid.Row="3" Background="#0D151E" Padding="24,12" BorderBrush="{StaticResource BorderColor}" BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="StatusMessage" Grid.Column="0" Text="Pronto" Foreground="{StaticResource TextSecondary}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="v1.0.0" Foreground="{StaticResource TextMuted}" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
