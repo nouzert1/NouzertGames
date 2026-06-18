@@ -707,7 +707,7 @@ namespace NouzertGames.Views
 
             if (string.IsNullOrWhiteSpace(_ryuApiService.AuthCode))
             {
-                SetStatusMessage("Chave reseller RyuManifest nao configurada.", "Error");
+                SetStatusMessage("Chave NouzertGames nao configurada.", "Error");
                 return;
             }
 
@@ -859,7 +859,7 @@ namespace NouzertGames.Views
 
                     if (string.IsNullOrEmpty(_ryuApiService.AuthCode))
                     {
-                        SetStatusMessage("Chave reseller RyuManifest nao configurada.", "Error");
+                        SetStatusMessage("Chave NouzertGames nao configurada.", "Error");
                         return;
                     }
 
@@ -1125,11 +1125,11 @@ namespace NouzertGames.Views
 
             if (string.IsNullOrWhiteSpace(resellerKey))
             {
-                SetStatusMessage("Informe a chave RyuManifest reseller", "Warning");
+                SetStatusMessage("Informe a chave NouzertGames", "Warning");
                 return;
             }
 
-            SetStatusMessage("Validando chave RyuManifest...", "Info");
+            SetStatusMessage("Validando chave NouzertGames...", "Info");
             var isValidKey = await _ryuApiService.ValidateAuthCodeAsync(resellerKey);
             if (!isValidKey)
             {
@@ -1141,7 +1141,7 @@ namespace NouzertGames.Views
             _ryuApiService.AuthCode = resellerKey;
             UpdateRyuManifestKeyStatus();
             UpdateActionStates();
-            SetStatusMessage("Chave RyuManifest salva localmente", "Success");
+            SetStatusMessage("Chave NouzertGames salva localmente", "Success");
         }
 
         private void UpdateActivationStatus()
@@ -1161,8 +1161,8 @@ namespace NouzertGames.Views
         {
             var configured = !string.IsNullOrWhiteSpace(_ryuApiService.AuthCode);
             RyuManifestKeyStatusText.Text = configured
-                ? "Status: chave RyuManifest local configurada."
-                : "Status: insira a chave key RyuManifest.";
+                ? "Status: chave NouzertGames configurada."
+                : "Status: insira a chave NouzertGames.";
             RyuManifestKeyStatusText.Foreground = configured
                 ? (Brush)FindResource("SuccessColor")
                 : (Brush)FindResource("ErrorColor");
@@ -1171,7 +1171,7 @@ namespace NouzertGames.Views
             {
                 RyuManifestKeyButton.Content = configured
                     ? "Salvar chave local"
-                    : "Insira a chave key RyuManifest";
+                    : "Insira a chave NouzertGames";
                 RyuManifestKeyButton.Background = configured
                     ? (Brush)FindResource("AccentColor")
                     : (Brush)FindResource("ErrorColor");

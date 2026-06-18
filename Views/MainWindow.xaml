@@ -220,7 +220,7 @@
                     <Image Source="/nouzertool.ico" Width="34" Height="34" Margin="0,0,12,0"/>
                     <StackPanel>
                         <TextBlock Text="NouzertGames" FontSize="23" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
-                        <TextBlock Text="Gerenciador SteamTools e RyuManifest" FontSize="12" Foreground="{StaticResource TextMuted}" Margin="1,1,0,0"/>
+                        <TextBlock Text="Gerenciador NouzertGames" FontSize="12" Foreground="{StaticResource TextMuted}" Margin="1,1,0,0"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -602,11 +602,11 @@
 
                         <Border Background="{StaticResource SecondaryBackground}" CornerRadius="8" Padding="20" Margin="0,0,0,16" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
                             <StackPanel>
-                                <TextBlock Text="Chave RyuManifest local" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
-                                <TextBlock Text="Cole sua chave reseller nesta maquina. Ela nao fica embutida no executavel." Foreground="{StaticResource TextSecondary}" Margin="0,0,0,12" TextWrapping="Wrap"/>
+                                <TextBlock Text="Chave NouzertGames" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
+                                <TextBlock Text="Cole sua chave NouzertGames nesta maquina. Ela nao fica embutida no executavel." Foreground="{StaticResource TextSecondary}" Margin="0,0,0,12" TextWrapping="Wrap"/>
                                 <PasswordBox x:Name="RyuManifestKeyBox" Margin="0,0,0,12" Height="38" Padding="12,8" Background="#0E1721" Foreground="{StaticResource TextPrimary}" BorderBrush="{StaticResource BorderColor}" BorderThickness="1"/>
-                                <Button x:Name="RyuManifestKeyButton" Content="Insira a chave key RyuManifest" Style="{StaticResource PrimaryButtonStyle}" Background="{StaticResource ErrorColor}" Foreground="{StaticResource TextPrimary}" Click="SaveRyuManifestKeyButton_Click"/>
-                                <TextBlock x:Name="RyuManifestKeyStatusText" Text="Status: insira a chave key RyuManifest." Foreground="{StaticResource ErrorColor}" Margin="0,10,0,0" TextWrapping="Wrap"/>
+                                <Button x:Name="RyuManifestKeyButton" Content="Insira a chave NouzertGames" Style="{StaticResource PrimaryButtonStyle}" Background="{StaticResource ErrorColor}" Foreground="{StaticResource TextPrimary}" Click="SaveRyuManifestKeyButton_Click"/>
+                                <TextBlock x:Name="RyuManifestKeyStatusText" Text="Status: insira a chave NouzertGames." Foreground="{StaticResource ErrorColor}" Margin="0,10,0,0" TextWrapping="Wrap"/>
                             </StackPanel>
                         </Border>
 
