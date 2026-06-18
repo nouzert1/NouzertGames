@@ -582,11 +582,11 @@
                     <StackPanel MaxWidth="640">
                         <TextBlock Text="Configuracoes" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,24"/>
 
-                        <Border Background="{StaticResource SecondaryBackground}" CornerRadius="8" Padding="20" Margin="0,0,0,16" BorderBrush="{StaticResource ErrorColor}" BorderThickness="1">
+                        <Border x:Name="SteamToolsRequirementPanel" Background="{StaticResource SecondaryBackground}" CornerRadius="8" Padding="20" Margin="0,0,0,16" BorderBrush="{StaticResource ErrorColor}" BorderThickness="1">
                             <StackPanel>
-                                <TextBlock Text="SteamTools obrigatorio" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
-                                <TextBlock Text="E requisito obrigatorio ter o SteamTools instalado para aplicar os manifests. Baixe pelo site oficial, copie o codigo no seu PowerShell e aperte Enter." Foreground="{StaticResource TextSecondary}" Margin="0,0,0,12" TextWrapping="Wrap"/>
-                                <Button Content="Baixar SteamTools" Style="{StaticResource PrimaryButtonStyle}" Background="{StaticResource ErrorColor}" Foreground="{StaticResource TextPrimary}" Click="DownloadSteamToolsButton_Click"/>
+                                <TextBlock x:Name="SteamToolsRequirementTitle" Text="SteamTools obrigatorio" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
+                                <TextBlock x:Name="SteamToolsRequirementInstruction" Text="E requisito obrigatorio ter o SteamTools instalado para aplicar os manifests. Baixe pelo site oficial, copie o codigo no seu PowerShell e aperte Enter." Foreground="{StaticResource TextSecondary}" Margin="0,0,0,12" TextWrapping="Wrap"/>
+                                <Button x:Name="SteamToolsDownloadButton" Content="Baixar SteamTools" Style="{StaticResource PrimaryButtonStyle}" Background="{StaticResource ErrorColor}" Foreground="{StaticResource TextPrimary}" Click="DownloadSteamToolsButton_Click"/>
                             </StackPanel>
                         </Border>
 

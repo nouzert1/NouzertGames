@@ -1294,6 +1294,14 @@ namespace NouzertGames.Views
         private void UpdateSteamToolsStatusUI()
         {
             var isRunning = _steamToolsService.IsSteamToolsRunning();
+            var steamToolsPath = _steamToolsService.DetectSteamToolsPath();
+            var isInstalled = !string.IsNullOrWhiteSpace(steamToolsPath) && File.Exists(steamToolsPath);
+
+            if (isInstalled && steamToolsPath != null)
+            {
+                SteamToolsExeTextBox.Text = steamToolsPath;
+                _configService.UpdateSteamToolsPath(steamToolsPath);
+            }
 
             SteamToolsStatusIndicator.Foreground = isRunning
                 ? (Brush?)(new BrushConverter().ConvertFromString("#107c10") ?? Brushes.Green)
@@ -1301,14 +1309,26 @@ namespace NouzertGames.Views
             SteamToolsStatusIndicator.Text = isRunning ? "SteamTools Rodando" : "SteamTools nao funcionando";
             SteamToolsStatusIndicator.ToolTip = isRunning ? "SteamTools esta rodando" : "Clique para iniciar o SteamTools";
 
+            SteamToolsRequirementPanel.BorderBrush = isInstalled
+                ? (Brush)FindResource("SuccessColor")
+                : (Brush)FindResource("ErrorColor");
+            SteamToolsRequirementTitle.Text = isInstalled ? "Steamtools instalado" : "SteamTools obrigatorio";
+            SteamToolsRequirementTitle.Foreground = isInstalled
+                ? (Brush)FindResource("SuccessColor")
+                : (Brush)FindResource("TextPrimary");
+            SteamToolsRequirementInstruction.Visibility = isInstalled ? Visibility.Collapsed : Visibility.Visible;
+            SteamToolsDownloadButton.Visibility = isInstalled ? Visibility.Collapsed : Visibility.Visible;
+
             // Update settings status text
-            SteamToolsStatusText.Text = isRunning ? "Rodando" : "Nao funcionando";
-            SteamToolsStatusText.Foreground = isRunning
+            SteamToolsStatusText.Text = isRunning
+                ? "Rodando"
+                : isInstalled ? "Instalado" : "Nao instalado";
+            SteamToolsStatusText.Foreground = isRunning || isInstalled
                 ? (Brush?)(new BrushConverter().ConvertFromString("#107c10") ?? Brushes.Green)
                 : (Brush?)(new BrushConverter().ConvertFromString("#e81123") ?? Brushes.Red);
 
             // Enable/disable Start button based on status
-            StartSteamToolsButton.IsEnabled = !isRunning && !string.IsNullOrEmpty(SteamToolsExeTextBox.Text) && SteamToolsExeTextBox.Text != "Not found. Click Browse to locate SteamTools.";
+            StartSteamToolsButton.IsEnabled = !isRunning && isInstalled;
         }
 
         /// <summary>
