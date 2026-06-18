@@ -73,6 +73,11 @@ namespace NouzertGames.Models
         public List<InstalledGame>? InstalledGames { get; set; } = new();
 
         /// <summary>
+        /// Steam AppIDs hidden from the app library after the user removes them.
+        /// </summary>
+        public List<string>? HiddenLibraryAppIds { get; set; } = new();
+
+        /// <summary>
         /// Gets or sets the last update check timestamp.
         /// </summary>
         public DateTime? LastUpdateCheck { get; set; }
@@ -351,6 +356,8 @@ namespace NouzertGames.Models
             if (config.InstalledGames == null)
                 config.InstalledGames = new List<InstalledGame>();
 
+            config.HiddenLibraryAppIds?.RemoveAll(id => string.Equals(id, appId, StringComparison.OrdinalIgnoreCase));
+
             // Check if already exists
             var existing = config.InstalledGames.FirstOrDefault(g => g.AppId == appId);
             if (existing != null)
@@ -379,16 +386,19 @@ namespace NouzertGames.Models
         public void RemoveInstalledGame(string appId)
         {
             var config = LoadConfig();
-            
-            if (config.InstalledGames == null)
-                return;
 
-            var game = config.InstalledGames.FirstOrDefault(g => g.AppId == appId);
+            if (config.InstalledGames == null)
+                config.InstalledGames = new List<InstalledGame>();
+
+            var game = config.InstalledGames.FirstOrDefault(g => string.Equals(g.AppId, appId, StringComparison.OrdinalIgnoreCase));
             if (game != null)
-            {
                 config.InstalledGames.Remove(game);
-                SaveConfig(config);
-            }
+
+            config.HiddenLibraryAppIds ??= new List<string>();
+            if (!config.HiddenLibraryAppIds.Any(id => string.Equals(id, appId, StringComparison.OrdinalIgnoreCase)))
+                config.HiddenLibraryAppIds.Add(appId);
+
+            SaveConfig(config);
         }
 
         /// <summary>
@@ -415,6 +425,7 @@ namespace NouzertGames.Models
                 MirrorManifestsToSteamDepotcache = true,
                 Preferences = new UserPreferences(),
                 InstalledGames = new List<InstalledGame>(),
+                HiddenLibraryAppIds = new List<string>(),
                 LastUpdateCheck = null
             };
         }

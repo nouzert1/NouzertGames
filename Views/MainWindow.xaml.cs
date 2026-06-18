@@ -260,13 +260,19 @@ namespace NouzertGames.Views
             InstalledGamesList.Items.Clear();
 
             var games = new List<InstalledGame>();
+            var hiddenAppIds = new HashSet<string>(
+                _config.HiddenLibraryAppIds ?? Enumerable.Empty<string>(),
+                StringComparer.OrdinalIgnoreCase);
 
             if (_config.InstalledGames != null)
-                games.AddRange(_config.InstalledGames);
+                games.AddRange(_config.InstalledGames.Where(game => !hiddenAppIds.Contains(game.AppId)));
 
             var steamGames = _steamService.GetInstalledSteamGames();
             foreach (var steamGame in steamGames)
             {
+                if (hiddenAppIds.Contains(steamGame.AppId))
+                    continue;
+
                 var existing = games.FirstOrDefault(game => game.AppId == steamGame.AppId);
                 if (existing == null)
                 {
@@ -984,18 +990,57 @@ namespace NouzertGames.Views
             if (sender is Button button && button.Tag is string appId)
             {
                 var result = MessageBox.Show(
-                    $"Are you sure you want to remove {appId} from your library?",
-                    "Confirm Removal",
+                    $"Deseja remover {appId} da biblioteca e apagar os arquivos instalados por este app?",
+                    "Confirmar remocao",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question);
 
                 if (result == MessageBoxResult.Yes)
                 {
+                    var removedFiles = RemoveInstalledGameFiles(appId);
                     _configService.RemoveInstalledGame(appId);
+                    _config = _configService.LoadConfig();
                     LoadInstalledGames();
-                    SetStatusMessage($"Removido {appId} da biblioteca", "Info");
+                    SetStatusMessage($"Removido {appId} da biblioteca ({removedFiles} arquivo(s) apagado(s))", "Info");
                 }
             }
+        }
+
+        private int RemoveInstalledGameFiles(string appId)
+        {
+            var removedFiles = 0;
+            var candidatePaths = new List<string>();
+
+            AddCandidateFile(candidatePaths, _config.SteamConfigPath, $"{appId}.lua");
+            AddCandidateFile(candidatePaths, _config.DepotCachePath, $"{appId}.manifest");
+            AddCandidateFile(candidatePaths, GetSteamRootDepotCacheDirectory(), $"{appId}.manifest");
+
+            foreach (var filePath in candidatePaths.Distinct(StringComparer.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    if (!File.Exists(filePath))
+                        continue;
+
+                    File.Delete(filePath);
+                    removedFiles++;
+                    _logger.Info($"Removed installed game file: {filePath}");
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warning($"Nao foi possivel remover '{filePath}': {ex.Message}");
+                }
+            }
+
+            return removedFiles;
+        }
+
+        private static void AddCandidateFile(List<string> paths, string? directory, string fileName)
+        {
+            if (string.IsNullOrWhiteSpace(directory))
+                return;
+
+            paths.Add(Path.Combine(directory, fileName));
         }
 
         private async void UpdateGameButton_Click(object sender, RoutedEventArgs e)
